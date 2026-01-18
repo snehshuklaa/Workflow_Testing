@@ -1,0 +1,32 @@
+name: Sample Workflow
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    # strategy:
+    #   matrix:
+    #     node-version: [18.x, 20.x, 22.x]
+    #     # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: List content
+      run: ls -lart
+    - name: Use Node.js 25.3.0
+      uses: actions/setup-node@v4
+      with:
+        node-version: 25.3.0
+    - name: Install packages 
+      run: npm ci
+      continue-on-error: true
+    - run: npm run build --if-present
+    - run: npm test
